@@ -3,6 +3,7 @@ import useAuth from './hooks/useAuth';
 import useAxiosPrivate from './hooks/useAxiosPrivate';
 import { api } from './api/axios';
 import './App.css';
+import useRefreshToken from './hooks/useRefreshToken';
 
 function App() {
   const { auth, setAuth } = useAuth();
@@ -10,6 +11,7 @@ function App() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const refresh = useRefreshToken();
 
   const login = async () => {
     setLoading(true);
@@ -55,8 +57,7 @@ function App() {
       // This is just to test the endpoint manually if needed, 
       // but the interceptor handles it automatically.
       try {
-          await api.post('/auth/refresh');
-          alert('Refresh request sent (check network tab)');
+          await refresh();
       } catch (err) {
           console.error(err);
       }
